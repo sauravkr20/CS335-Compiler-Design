@@ -31,6 +31,7 @@ INPUT_FILE = ./test.py
 post this run the following commands
 
 ```
+cd src
 make
 make run
 ```
