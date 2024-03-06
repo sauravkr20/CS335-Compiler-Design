@@ -1,3 +1,3 @@
-pi = 3.1415
-r = 8.0
-circle_area = pi * r * r
+def add_numbers(x, y):
+    result = x + y
+    return result

@@ -114,6 +114,38 @@ void print_tree_recursively(Node *n, std::string prefix, int lineno) {
           print_tree_recursively(child, prefix + "_rhs", lineno);
         }
       }
+    }else if(cat == "FunctionDef" ){ 
+      std::cout << prefix << ";" << std::endl;
+      std::cout << "  " << prefix << " [label=\"Function -> " << (*n).label << "\"];" << std::endl;
+      int num = 0;
+      for (Node *child: (*n).children) {
+        std::cout << "  " << prefix << " -> ";
+        if (num == 0) {
+          print_tree_recursively(child, prefix + "_lhs", lineno);
+          num++;
+        }
+        else {
+          print_tree_recursively(child, prefix + "_rhs", lineno);
+        }
+      }
+    } else { 
+      std::cout << prefix << ";" << std::endl;
+      if(cat =="Return"){
+        std::cout << "  " << prefix << " [label=\"ret_stmt\"];" << std::endl;
+      }else { 
+        std::cout << "  " << prefix << " [label=\"stmt\"];" << std::endl;
+      }
+      int num = 0;
+      for (Node *child: (*n).children) {
+        std::cout << "  " << prefix << " -> ";
+        if (num == 0) {
+          print_tree_recursively(child, prefix + "_lhs", lineno);
+          num++;
+        }
+        else {
+          print_tree_recursively(child, prefix + "_rhs", lineno);
+        }
+      }
     }
   }
 }

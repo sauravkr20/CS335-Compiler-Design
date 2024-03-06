@@ -37,7 +37,9 @@ Node *root = create_node("Block");
 %type<collection> stmts
 %type<node> stmt expression negated_expression primary_expression assign_stmt
 %type<node> if_stmt condition else_block elif_blocks block
-%type<node> while_stmt break_stmt continue_stmt 
+%type<node> while_stmt break_stmt continue_stmt return_stmt
+%type<node> function_def parameters function_call arguments
+
 
 %left OR
 %left AND
@@ -71,6 +73,41 @@ stmt
   | while_stmt { $$ = $1; }
   | break_stmt { $$ = $1; }
   | continue_stmt { $$ = $1; }
+  | function_def { $$ = $1; }
+  | function_call { $$ = $1; }
+  | return_stmt { $$ = $1; }
+  ;
+
+parameters
+  : %empty { $$ = create_node("EmptyParameters", {}, "EmptyParameters"); }
+  | IDENTIFIER {
+      $$ = create_node(*$1, {}, "Parameters");
+    }
+  | parameters COMMA IDENTIFIER {
+      $$ = create_node("Parameters",{$1, create_node(*$3, {}, "Identifier")},  "Parameters");
+    }
+  ;
+
+arguments
+  : %empty { $$ = create_node("EmptyArguments", {}, "EmptyArguments"); }
+  | expression {
+      $$ = create_node("Arguments", {$1}, "Arguments");
+    }
+  | arguments COMMA expression {
+      $$ = create_node("Arguments", {$1, $3}, "Arguments");
+    }
+  ;
+
+function_def
+  : DEF IDENTIFIER LPAREN parameters RPAREN COLON NEWLINE block  {
+      $$ = create_node(*$2, {create_node(*$2, {}, "Identifier"), $4, $8}, "FunctionDef");
+    }
+  ;
+  
+function_call
+  : IDENTIFIER LPAREN arguments RPAREN {
+      $$ = create_node("FunctionCall", {create_node(*$1, {}, "Identifier"), $3} , "FunctionCall");
+    }
   ;
 
 primary_expression
@@ -189,6 +226,11 @@ continue_stmt
     $$ = create_node("Continue", {}, "Continue");
     }
   ;
+  
+return_stmt
+  : RETURN expression { 
+    $$ = create_node("Return", { $2 }, "Return");
+  }
 
 %%
 

@@ -7,6 +7,7 @@ The following syntatic structures are supported:
 * While loops
 * Break stmts
 * Continue stmts
+* Function stmts
 
 ## Using
 
