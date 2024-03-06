@@ -1,4 +1,4 @@
-INPUT_FILE := ./tests/test1.py
+INPUT_FILE := ../tests/test1.py
 all: parse
 
 parser.cpp parser.hpp: parser.y
@@ -15,7 +15,5 @@ clean:
 	rm -f output.pdf
 
 run:
-	./parse < $(INPUT_FILE) > output.gv
-	dot -Tpdf -o output.pdf output.gv
-
-	
+	./parse < $(INPUT_FILE) > ../output.gv
+	dot -Tpdf -o ../output.pdf ../output.gv
